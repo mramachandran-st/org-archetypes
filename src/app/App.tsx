@@ -561,6 +561,276 @@ function ArchetypeView({ a, onBack }: { a: Archetype; onBack: () => void }) {
   );
 }
 
+// ─── Company Org Page ────────────────────────────────────────────────────────
+
+const companyData = {
+  authorityBrands: {
+    id: "ab",
+    name: "Authority Brands",
+    color: "#0B7A6C",
+    bg: "#E8F7F4",
+    border: "#7ED4C8",
+    callout: "PE sub-networks operate their own Enterprise Hub — Authority Brands cannot see or access them.",
+    quotes: [
+      { text: "I get to say, you have to do it this way. Victor gets to say, I really strongly suggest — unless we get this written in the contract.", attr: "Margie · Authority Brands · 00:39:01" },
+      { text: "I cannot log into their Enterprise Hub network.", attr: "Victor · Authority Brands · 00:14:57" },
+    ],
+  },
+  aceHandyman: {
+    id: "ace",
+    name: "Ace Handyman",
+    color: "#C07020",
+    bg: "#FDF3E3",
+    border: "#F0C070",
+    callout: "Territory (zip codes) is the actual unit being sold — not a location. Open zip codes are shared with no ST representation.",
+    quotes: [
+      { text: "They can finagle it. They put the customer's zip code as their own zip code rather than the right one.", attr: "Amy · Ace Handyman · 00:20:54" },
+    ],
+  },
+};
+
+function ABOrgTree({ color, bg, border }: { color: string; bg: string; border: string }) {
+  return (
+    <div style={{ fontFamily: "sans-serif" }}>
+      {/* Top node */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ maxWidth: 420, width: "100%" }}>
+          <OrgNode label="PE / Authority Brands Corporate" sublabel="Network · mandate authority differs by branch type" accent={color} solid />
+        </div>
+      </div>
+      {/* Branching connectors */}
+      <div style={{ position: "relative", height: 36 }}>
+        <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 2, height: 18, background: color + "60" }} />
+        <div style={{ position: "absolute", top: 18, left: "16.67%", right: "16.67%", height: 2, background: color + "60" }} />
+        {[16.67, 50, 83.33].map(pos => (
+          <div key={pos} style={{ position: "absolute", top: 18, left: `${pos}%`, width: 2, height: 18, background: color + "60", transform: "translateX(-50%)" }} />
+        ))}
+      </div>
+      {/* Three branches */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+        {/* PE sub-networks — dashed */}
+        <div>
+          <div style={{ background: "white", border: `2px dashed ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color }}>PE sub-networks</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>3–4 PE firms · 4–12 tenants each</div>
+            <div style={{ fontSize: 9, color: "#D85A30", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Own Enterprise Hub — AB cannot log in</div>
+          </div>
+          <VLine color="#C8C3B5" h={12} />
+          <LevelNode label="Franchise tenants" sublabel="4–12 per PE firm" type="location" />
+        </div>
+        {/* Direct Franchisees */}
+        <div>
+          <div style={{ background: bg, border: `2px solid ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color }}>Direct Franchisees</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>240+ tenants · 4 regions</div>
+            <div style={{ fontSize: 9, color: "#888", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Suggest only, unless written into contract</div>
+          </div>
+          {([
+            { type: "territory" as NodeType, label: "Territory", sublabel: "Licensed zip codes · the franchise unit" },
+            { type: "region" as NodeType, label: "Region", sublabel: "Northeast · Southeast · Mid-Atlantic · Central" },
+            { type: "location" as NodeType, label: "Location / Tenant", sublabel: "Manassas VA · Raleigh NC · Tampa FL · can be tri-branded" },
+            { type: "brand" as NodeType, label: "Brand / Trade", sublabel: "One Hour HVAC · Ben Franklin Plumbing · Sparky Electric" },
+            { type: "bu" as NodeType, label: "BU", sublabel: "Install · Service · Maintenance · Sales" },
+          ]).map((l) => (
+            <div key={l.label}>
+              <VLine color="#C8C3B5" h={12} />
+              <LevelNode label={l.label} sublabel={l.sublabel} type={l.type} />
+            </div>
+          ))}
+        </div>
+        {/* Corporate OpCos */}
+        <div>
+          <div style={{ background: bg, border: `2px solid ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color }}>Corporate OpCos</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>9 company-owned locations</div>
+            <div style={{ fontSize: 9, color: "#0F6E56", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>AB can mandate — they own these</div>
+          </div>
+          {([
+            { type: "location" as NodeType, label: "Location / Tenant", sublabel: "Company-owned physical location" },
+            { type: "brand" as NodeType, label: "Brand / Trade", sublabel: "One Hour · Ben Franklin · Sparky" },
+            { type: "bu" as NodeType, label: "BU", sublabel: "Install · Service · Maintenance" },
+          ]).map((l) => (
+            <div key={l.label}>
+              <VLine color="#C8C3B5" h={12} />
+              <LevelNode label={l.label} sublabel={l.sublabel} type={l.type} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AceOrgTree({ color, bg, border }: { color: string; bg: string; border: string }) {
+  return (
+    <div style={{ fontFamily: "sans-serif" }}>
+      {/* Top node */}
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <div style={{ maxWidth: 360, width: "100%" }}>
+          <OrgNode label="Ace Handyman Corporate" sublabel="Network · franchise oversight" accent={color} solid />
+        </div>
+      </div>
+      {/* Two branches: Regions and Franchise Owners */}
+      <div style={{ position: "relative", height: 36 }}>
+        <div style={{ position: "absolute", top: 0, left: "50%", transform: "translateX(-50%)", width: 2, height: 18, background: color + "60" }} />
+        <div style={{ position: "absolute", top: 18, left: "25%", right: "25%", height: 2, background: color + "60" }} />
+        {[25, 75].map(pos => (
+          <div key={pos} style={{ position: "absolute", top: 18, left: `${pos}%`, width: 2, height: 18, background: color + "60", transform: "translateX(-50%)" }} />
+        ))}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        {/* Regions / FBC */}
+        <div>
+          <div style={{ background: "white", border: `2px dashed ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color }}>Regions (FBC portfolios)</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>Franchise Biz Coach groupings · Excel tracking today</div>
+            <div style={{ fontSize: 9, color: "#888", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Not in ST — invisible management layer</div>
+          </div>
+          <VLine color="#C8C3B5" h={12} />
+          <LevelNode label="FBC manages 20–30 owners" sublabel="Portfolio visibility · Excel only" type="region" />
+        </div>
+        {/* Franchise Owner branch */}
+        <div>
+          <div style={{ background: bg, border: `2px solid ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color }}>Franchise Owner</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>1+ territories · P&L responsibility</div>
+            <div style={{ fontSize: 9, color: "#888", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Can be suggested to, not mandated</div>
+          </div>
+          {([
+            { type: "territory" as NodeType, label: "Territory", sublabel: "Licensed zip codes · the unit Ace sells · open zips shared" },
+            { type: "location" as NodeType, label: "Location / Tenant", sublabel: "Physical shop · maps to the territory" },
+            { type: "bu" as NodeType, label: "BU", sublabel: "Handyman services · Install · Maintenance" },
+          ]).map((l) => (
+            <div key={l.label}>
+              <VLine color="#C8C3B5" h={12} />
+              <LevelNode label={l.label} sublabel={l.sublabel} type={l.type} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CompanyOrgPage({ onBack }: { onBack: () => void }) {
+  const [company, setCompany] = useState<"ab" | "ace">("ab");
+  const ab = companyData.authorityBrands;
+  const ace = companyData.aceHandyman;
+  const active = company === "ab" ? ab : ace;
+
+  return (
+    <div style={{ minHeight: "100vh", background: "#FAFAF9", fontFamily: "Georgia, serif" }}>
+      {/* Header */}
+      <div style={{ background: active.color, padding: "32px 48px 28px", transition: "background 0.2s" }}>
+        <button onClick={onBack} style={{ background: "rgba(255,255,255,0.15)", border: "none", color: "white", padding: "6px 14px", borderRadius: 20, fontSize: 12, cursor: "pointer", marginBottom: 20, fontFamily: "sans-serif" }}>← Back</button>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, flexWrap: "wrap" }}>
+          <h1 style={{ fontSize: 34, fontWeight: 400, margin: 0, color: "white", flex: 1 }}>
+            {active.name} <em style={{ color: "rgba(255,255,255,0.7)", fontSize: 22 }}>org structure</em>
+          </h1>
+          {/* Company toggle */}
+          <div style={{ display: "flex", background: "rgba(0,0,0,0.2)", borderRadius: 24, padding: 3, gap: 2 }}>
+            {([
+              { id: "ab" as const, label: "Authority Brands" },
+              { id: "ace" as const, label: "Ace Handyman" },
+            ]).map(c => (
+              <button key={c.id} onClick={() => setCompany(c.id)} style={{
+                background: company === c.id ? "white" : "transparent",
+                color: company === c.id ? active.color : "rgba(255,255,255,0.7)",
+                border: "none", borderRadius: 20, padding: "6px 16px", fontSize: 12, cursor: "pointer",
+                fontWeight: company === c.id ? 700 : 400, fontFamily: "sans-serif", transition: "all 0.15s",
+              }}>{c.label}</button>
+            ))}
+          </div>
+        </div>
+        <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", margin: "10px 0 0", fontFamily: "sans-serif" }}>
+          {company === "ab"
+            ? "Franchise Network · 240+ direct tenants · 3–4 PE sub-networks · 9 corporate OpCos"
+            : "Franchise Network · territories sold as licensed zip codes · FBC portfolios tracked in Excel"}
+        </p>
+      </div>
+
+      <div style={{ maxWidth: 980, margin: "0 auto", padding: "36px 32px" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: 24 }}>
+          {/* Org tree */}
+          <div>
+            <h2 style={{ fontSize: 16, fontWeight: 400, margin: "0 0 14px", color: "#1a1a1a" }}>Hierarchy</h2>
+            <div style={{ ...fjBg, padding: 24, borderRadius: 12, border: `1px solid ${active.border}` }}>
+              <NodeLegend />
+              {company === "ab"
+                ? <ABOrgTree color={ab.color} bg={ab.bg} border={ab.border} />
+                : <AceOrgTree color={ace.color} bg={ace.bg} border={ace.border} />
+              }
+            </div>
+          </div>
+
+          {/* Sidebar / legend */}
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <h2 style={{ fontSize: 16, fontWeight: 400, margin: 0, color: "#1a1a1a" }}>Level guide</h2>
+            {/* Level explanations */}
+            <div style={{ background: "white", border: `1px solid ${active.border}`, borderRadius: 10, padding: "14px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+              {(company === "ab" ? [
+                { icon: "◉", label: "Network", desc: "Authority Brands corporate — sets permission ceilings" },
+                { icon: "⊟", label: "PE sub-network", desc: "Own Enterprise Hub, AB cannot access" },
+                { icon: "◎", label: "Territory", desc: "Licensed zip codes — the franchise unit" },
+                { icon: "⊕", label: "Region", desc: "NE · SE · Mid-Atlantic · Central" },
+                { icon: "▣", label: "Location / Tenant", desc: "Physical shop, can be tri-branded" },
+                { icon: "◈", label: "Brand / Trade", desc: "One Hour · Ben Franklin · Sparky" },
+                { icon: "⊞", label: "BU", desc: "Install · Service · Maintenance · Sales" },
+              ] : [
+                { icon: "◉", label: "Network", desc: "Ace Handyman corporate — oversees all franchisees" },
+                { icon: "⊟", label: "Region (FBC)", desc: "Invisible in ST — Excel tracking only" },
+                { icon: "◎", label: "Territory", desc: "Licensed zip codes — what Ace actually sells" },
+                { icon: "▣", label: "Location / Tenant", desc: "Physical shop mapping to territory" },
+                { icon: "⊞", label: "BU", desc: "Handyman · Install · Maintenance" },
+              ]).map((item, i) => (
+                <div key={i} style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+                  <div style={{ fontSize: 14, color: active.color, flexShrink: 0, marginTop: 1 }}>{item.icon}</div>
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: active.color }}>{item.label}</div>
+                    <div style={{ fontSize: 10, color: "#888", marginTop: 1, lineHeight: 1.4 }}>{item.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Key callout */}
+            <div style={{ background: active.bg, border: `1.5px solid ${active.border}`, borderRadius: 10, padding: "12px 14px" }}>
+              <div style={{ fontSize: 9, textTransform: "uppercase", letterSpacing: "0.1em", color: active.color, marginBottom: 6, fontFamily: "'DM Mono', monospace" }}>Key callout</div>
+              <p style={{ fontSize: 12, color: "#404040", margin: 0, lineHeight: 1.6, fontFamily: "sans-serif" }}>{active.callout}</p>
+            </div>
+
+            {/* Quotes */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {active.quotes.map((q, i) => (
+                <div key={i} style={{ display: "flex", borderRadius: 8, overflow: "hidden", border: "1px solid #E8E6E1", background: "white" }}>
+                  <div style={{ width: 3, background: active.color, flexShrink: 0 }} />
+                  <div style={{ padding: "10px 12px" }}>
+                    <p style={{ fontStyle: "italic", fontSize: 11, color: "#404040", margin: "0 0 4px", lineHeight: 1.6 }}>"{q.text}"</p>
+                    <p style={{ fontSize: 9, color: active.color, margin: 0, fontFamily: "'DM Mono', monospace" }}>— {q.attr}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom callout — structural difference */}
+        <div style={{ marginTop: 24, padding: "14px 18px", background: "white", border: "1.5px solid #E0DDD6", borderRadius: 10, display: "flex", gap: 12, alignItems: "flex-start" }}>
+          <div style={{ fontSize: 16, flexShrink: 0 }}>⇄</div>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#1a1a1a", marginBottom: 4 }}>Key difference: Ace sells zip codes, AB sells territories with trade brands beneath them</div>
+            <p style={{ fontSize: 12, color: "#666", margin: 0, lineHeight: 1.6, fontFamily: "sans-serif" }}>
+              In Authority Brands, the territory is the licensed zone and trade brands (One Hour, Ben Franklin, Sparky) sit below the location as distinct identities.
+              In Ace Handyman, the territory (zip codes) is the actual unit being sold — location is just the physical shop that maps to it.
+              Open zip codes in Ace are shared with no ST representation at all.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function App() {
   const [view, setView] = useState("home");
   const [selected, setSelected] = useState<Archetype | null>(null);
@@ -571,6 +841,8 @@ export default function App() {
   };
 
   if (view === "archetype" && selected) return <ArchetypeView a={selected} onBack={() => go("home")} />;
+
+  if (view === "company-org") return <CompanyOrgPage onBack={() => go("home")} />;
 
   if (view === "patterns") {
     return (
@@ -713,6 +985,7 @@ export default function App() {
             { label: "Cross-cutting patterns", desc: "5 patterns across all archetypes", icon: "⊞", action: () => go("patterns"), bg: "#1a1a1a" },
             { label: "Glossary", desc: "What customers call things vs ST", icon: "⌨", action: () => go("glossary"), bg: "#1E2B1E" },
             { label: "Synthesis diagram", desc: "FigJam board, interactive", icon: "◻", action: () => go("synthesis"), bg: "#1B1F2E" },
+            { label: "Company structures", desc: "Authority Brands & Ace Handyman", icon: "⊕", action: () => go("company-org"), bg: "#0B3830" },
           ].map((item, i) => (
             <div key={i} onClick={item.action} style={{ background: item.bg, borderRadius: 14, padding: "22px 20px", cursor: "pointer", transition: "opacity 0.15s" }}
               onMouseEnter={e => (e.currentTarget as HTMLDivElement).style.opacity = "0.85"}
