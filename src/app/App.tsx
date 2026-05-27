@@ -570,7 +570,7 @@ const companyData = {
     color: "#0B7A6C",
     bg: "#E8F7F4",
     border: "#7ED4C8",
-    callout: "PE sub-networks operate their own Enterprise Hub — Authority Brands cannot see or access them.",
+    callout: "PE sub-networks operate their own Enterprise Hub — Authority Brands cannot see or access them. AB corporate has 3 tenants in ST (authoritybrands_franchise_ob_training, authoritybrands_marketing, authoritybrands_ob_demo). Direct franchisees include 24 One Hour tenants, 3 Ben Franklin tenants, and 7 Mister Sparky tenants in ST. Corporate OpCos (n=9) in Denver & NC are the only locations AB can mandate.",
     quotes: [
       { text: "I get to say, you have to do it this way. Victor gets to say, I really strongly suggest — unless we get this written in the contract.", attr: "Margie · Authority Brands · 00:39:01" },
       { text: "I cannot log into their Enterprise Hub network.", attr: "Victor · Authority Brands · 00:14:57" },
@@ -582,7 +582,7 @@ const companyData = {
     color: "#C07020",
     bg: "#FDF3E3",
     border: "#F0C070",
-    callout: "Territory (zip codes) is the actual unit being sold — not a location. Open zip codes are shared with no ST representation.",
+    callout: "Territory (zip codes) is the actual unit being sold — not a location. Open zip codes are shared with no ST representation. 255 franchise tenants in ST today (grew from 174 at CAB session). Top by call volume: Northwest Columbus, SW Florida, Greater Triangle, Metro Denver, Columbia. Opcos (Denver · Kansas City · Austin) are company-owned and transitioning to franchise — BU type: contractor / contractor CS.",
     quotes: [
       { text: "They can finagle it. They put the customer's zip code as their own zip code rather than the right one.", attr: "Amy · Ace Handyman · 00:20:54" },
     ],
@@ -595,7 +595,7 @@ function ABOrgTree({ color, bg, border }: { color: string; bg: string; border: s
       {/* Top node */}
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ maxWidth: 420, width: "100%" }}>
-          <OrgNode label="PE / Authority Brands Corporate" sublabel="Network · mandate authority differs by branch type" accent={color} solid />
+          <OrgNode label="PE / Authority Brands Corporate" sublabel="Network · 3 corporate tenants in ST: authoritybrands_franchise_ob_training · authoritybrands_marketing · authoritybrands_ob_demo" accent={color} solid />
         </div>
       </div>
       {/* Branching connectors */}
@@ -611,26 +611,27 @@ function ABOrgTree({ color, bg, border }: { color: string; bg: string; border: s
         {/* PE sub-networks — dashed */}
         <div>
           <div style={{ background: "white", border: `2px dashed ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color }}>PE sub-networks</div>
-            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>3–4 PE firms · 4–12 tenants each</div>
-            <div style={{ fontSize: 9, color: "#D85A30", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Own Enterprise Hub — AB cannot log in</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color }}>EH Networks (PE sub-networks)</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>3–4 PE firms · 4–12 tenants each · own separate Enterprise Hub</div>
+            <div style={{ fontSize: 9, color: "#D85A30", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>AB CANNOT log in to these — fully walled off</div>
           </div>
           <VLine color="#C8C3B5" h={12} />
-          <LevelNode label="Franchise tenants" sublabel="4–12 per PE firm" type="location" />
+          <LevelNode label="Franchise tenants" sublabel="4–12 per PE firm · managed within their own EH" type="location" />
         </div>
         {/* Direct Franchisees */}
         <div>
           <div style={{ background: bg, border: `2px solid ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color }}>Direct Franchisees</div>
-            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>240+ tenants · 4 regions</div>
-            <div style={{ fontSize: 9, color: "#888", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Suggest only, unless written into contract</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color }}>Direct Franchisees (240)</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>Split: Centrex (n=4 centrally managed) · Local (87% independent) · Florida (regional cluster)</div>
+            <div style={{ fontSize: 9, color: "#888", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Suggest only, unless written into franchise contract</div>
           </div>
           {([
-            { type: "territory" as NodeType, label: "Territory", sublabel: "Licensed zip codes · the franchise unit" },
             { type: "region" as NodeType, label: "Region", sublabel: "Northeast · Southeast · Mid-Atlantic · Central" },
-            { type: "location" as NodeType, label: "Location / Tenant", sublabel: "Manassas VA · Raleigh NC · Tampa FL · can be tri-branded" },
-            { type: "brand" as NodeType, label: "Brand / Trade", sublabel: "One Hour HVAC · Ben Franklin Plumbing · Sparky Electric" },
-            { type: "bu" as NodeType, label: "BU", sublabel: "Install · Service · Maintenance · Sales" },
+            { type: "location" as NodeType, label: "Franchise Owner / Location", sublabel: "Manassas VA · Raleigh NC · Tampa FL · can be tri-branded" },
+            { type: "brand" as NodeType, label: "One Hour Heating & Air", sublabel: "24 tenants in ST · onehourairflorida · onehourairfortworth · onehourairwestpalmbeach" },
+            { type: "brand" as NodeType, label: "Ben Franklin Plumbing", sublabel: "3 tenants in ST · benfranklinflorida · benfranklinplumbingmckinneytx" },
+            { type: "brand" as NodeType, label: "Mister Sparky Electric", sublabel: "7 tenants in ST · mistersparkyflorida · mistersparkyhuntsville · mistersparkycoloradosprings" },
+            { type: "bu" as NodeType, label: "BU (under each brand)", sublabel: "Sales · Install · Svc · Maint + Territory (zip codes)" },
           ]).map((l) => (
             <div key={l.label}>
               <VLine color="#C8C3B5" h={12} />
@@ -641,9 +642,9 @@ function ABOrgTree({ color, bg, border }: { color: string; bg: string; border: s
         {/* Corporate OpCos */}
         <div>
           <div style={{ background: bg, border: `2px solid ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color }}>Corporate OpCos</div>
-            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>9 company-owned locations</div>
-            <div style={{ fontSize: 9, color: "#0F6E56", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>AB can mandate — they own these</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color }}>Corporate OpCos (n=9)</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>Company-owned · Denver, NC locations</div>
+            <div style={{ fontSize: 9, color: "#0F6E56", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>AB can mandate these — only group they own directly</div>
           </div>
           {([
             { type: "location" as NodeType, label: "Location / Tenant", sublabel: "Company-owned physical location" },
@@ -667,7 +668,7 @@ function AceOrgTree({ color, bg, border }: { color: string; bg: string; border: 
       {/* Top node */}
       <div style={{ display: "flex", justifyContent: "center" }}>
         <div style={{ maxWidth: 360, width: "100%" }}>
-          <OrgNode label="Ace Handyman Corporate" sublabel="Network · franchise oversight" accent={color} solid />
+          <OrgNode label="Ace Handyman Home Svcs (Corporate)" sublabel="Network · 255 franchise tenants in ST today (grew from 174 at CAB session)" accent={color} solid />
         </div>
       </div>
       {/* Two branches: Regions and Franchise Owners */}
@@ -682,24 +683,30 @@ function AceOrgTree({ color, bg, border }: { color: string; bg: string; border: 
         {/* Regions / FBC */}
         <div>
           <div style={{ background: "white", border: `2px dashed ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color }}>Regions (FBC portfolios)</div>
-            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>Franchise Biz Coach groupings · Excel tracking today</div>
-            <div style={{ fontSize: 9, color: "#888", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Not in ST — invisible management layer</div>
+            <div style={{ fontSize: 12, fontWeight: 700, color }}>4 Regions (FBC portfolios)</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>East · Region 2 · Region 3 · Region 4 · FBC manages ~20–30 owners each</div>
+            <div style={{ fontSize: 9, color: "#888", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Not in ST — invisible layer · Excel tracking only</div>
           </div>
           <VLine color="#C8C3B5" h={12} />
-          <LevelNode label="FBC manages 20–30 owners" sublabel="Portfolio visibility · Excel only" type="region" />
+          <LevelNode label="Open Zipcodes" sublabel="No BU · just zones · no ST representation — shared with no owner" type="region" />
+          <VLine color="#C8C3B5" h={12} />
+          <div style={{ background: "white", border: `1.5px dashed ${border}`, borderRadius: 8, padding: "8px 10px" }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color }}>Opcos (company-owned)</div>
+            <div style={{ fontSize: 9, color, opacity: 0.8, marginTop: 2, lineHeight: 1.4 }}>Denver · Kansas City · Austin · managed by Dave (CCPro)</div>
+            <div style={{ fontSize: 9, color: "#0F6E56", marginTop: 4, borderTop: `1px solid ${border}`, paddingTop: 4, fontStyle: "italic", lineHeight: 1.4 }}>Transitioning to franchise · BU type: contractor / contractor CS</div>
+          </div>
         </div>
         {/* Franchise Owner branch */}
         <div>
           <div style={{ background: bg, border: `2px solid ${border}`, borderRadius: 10, padding: "9px 12px", textAlign: "center" }}>
             <div style={{ fontSize: 12, fontWeight: 700, color }}>Franchise Owner</div>
-            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>1+ territories · P&L responsibility</div>
+            <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>1+ territories · P&L responsibility · can consolidate CSRs & marketing</div>
             <div style={{ fontSize: 9, color: "#888", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Can be suggested to, not mandated</div>
           </div>
           {([
-            { type: "territory" as NodeType, label: "Territory", sublabel: "Licensed zip codes · the unit Ace sells · open zips shared" },
-            { type: "location" as NodeType, label: "Location / Tenant", sublabel: "Physical shop · maps to the territory" },
-            { type: "bu" as NodeType, label: "BU", sublabel: "Handyman services · Install · Maintenance" },
+            { type: "territory" as NodeType, label: "Territory / BU (Owned Zipcodes)", sublabel: "Licensed zip codes · the unit Ace sells · e.g. Denver West · Denver East" },
+            { type: "location" as NodeType, label: "Location / Tenant", sublabel: "255 tenants today · acehandyman_metrodenver · acehandyman_swflorida · acehandyman_greatertriangle · acehandyman_columbia" },
+            { type: "bu" as NodeType, label: "BU", sublabel: "Handyman services · Install · Maintenance · CSRs merge when consolidating" },
           ]).map((l) => (
             <div key={l.label}>
               <VLine color="#C8C3B5" h={12} />
@@ -744,8 +751,8 @@ function CompanyOrgPage({ onBack }: { onBack: () => void }) {
         </div>
         <p style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", margin: "10px 0 0", fontFamily: "sans-serif" }}>
           {company === "ab"
-            ? "Franchise Network · 240+ direct tenants · 3–4 PE sub-networks · 9 corporate OpCos"
-            : "Franchise Network · territories sold as licensed zip codes · FBC portfolios tracked in Excel"}
+            ? "Franchise Network · 240 direct franchisees · 3 AB corporate tenants in ST · 3–4 PE sub-networks (own separate EH) · 9 corporate OpCos (Denver, NC)"
+            : "Franchise Network · 255 tenants in ST (grew from 174 at CAB session) · territories = licensed zip codes · FBC portfolios tracked in Excel"}
         </p>
       </div>
 
