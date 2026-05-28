@@ -238,14 +238,15 @@ const nodeTypes: Record<NodeType, { color: string; Icon: React.FC<{ size?: numbe
   territory: { color: "#B45309", Icon: Flag },
 };
 
-const LevelNode = ({ label, sublabel, type }: { label: string; sublabel?: string; type?: NodeType }) => {
+const LevelNode = ({ label, sublabel, type, extra }: { label: string; sublabel?: string; type?: NodeType; extra?: React.ReactNode }) => {
   const nt = type ? nodeTypes[type] : null;
   return (
-    <div style={{ background: "white", border: `1.5px solid ${nt ? nt.color + "40" : "#DDD9D0"}`, borderRadius: 8, padding: "7px 12px", display: "flex", alignItems: "center", gap: 8 }}>
-      {nt && <nt.Icon size={13} color={nt.color} />}
-      <div>
+    <div style={{ background: "white", border: `1.5px solid ${nt ? nt.color + "40" : "#DDD9D0"}`, borderRadius: 8, padding: "7px 12px", display: "flex", alignItems: "flex-start", gap: 8 }}>
+      {nt && <nt.Icon size={13} color={nt.color} style={{ marginTop: 2, flexShrink: 0 }} />}
+      <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 12, fontWeight: 600, color: nt ? nt.color : "#2a2a2a" }}>{label}</div>
         {sublabel && <div style={{ fontSize: 10, color: "#999", marginTop: 1, lineHeight: 1.4 }}>{sublabel}</div>}
+        {extra}
       </div>
     </div>
   );
@@ -589,6 +590,26 @@ const companyData = {
   },
 };
 
+const TenantChips = ({ tenants, color, moreCount }: { tenants: string[]; color: string; moreCount?: number }) => (
+  <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginTop: 6 }}>
+    {tenants.map((t, i) => (
+      <span key={i} style={{
+        background: color + "12",
+        border: `1px solid ${color}30`,
+        borderRadius: 4,
+        padding: "2px 6px",
+        fontSize: 9,
+        fontFamily: "'DM Mono', monospace",
+        color: color,
+        whiteSpace: "nowrap"
+      }}>{t}</span>
+    ))}
+    {moreCount && moreCount > 0 && (
+      <span style={{ fontSize: 9, color: "#aaa", fontFamily: "'DM Mono', monospace", padding: "2px 4px" }}>+{moreCount} more</span>
+    )}
+  </div>
+);
+
 function ABOrgTree({ color, bg, border }: { color: string; bg: string; border: string }) {
   return (
     <div style={{ fontFamily: "sans-serif" }}>
@@ -628,16 +649,45 @@ function ABOrgTree({ color, bg, border }: { color: string; bg: string; border: s
           {([
             { type: "region" as NodeType, label: "Region", sublabel: "Northeast · Southeast · Mid-Atlantic · Central" },
             { type: "location" as NodeType, label: "Franchise Owner / Location", sublabel: "Manassas VA · Raleigh NC · Tampa FL · can be tri-branded" },
-            { type: "brand" as NodeType, label: "One Hour Heating & Air", sublabel: "24 tenants in ST · onehourairflorida · onehourairfortworth · onehourairwestpalmbeach" },
-            { type: "brand" as NodeType, label: "Ben Franklin Plumbing", sublabel: "3 tenants in ST · benfranklinflorida · benfranklinplumbingmckinneytx" },
-            { type: "brand" as NodeType, label: "Mister Sparky Electric", sublabel: "7 tenants in ST · mistersparkyflorida · mistersparkyhuntsville · mistersparkycoloradosprings" },
-            { type: "bu" as NodeType, label: "BU (under each brand)", sublabel: "Sales · Install · Svc · Maint + Territory (zip codes)" },
           ]).map((l) => (
             <div key={l.label}>
               <VLine color="#C8C3B5" h={12} />
               <LevelNode label={l.label} sublabel={l.sublabel} type={l.type} />
             </div>
           ))}
+          <VLine color="#C8C3B5" h={12} />
+          <LevelNode label="One Hour Heating & Air" sublabel="24 tenants in ST" type="brand" extra={
+            <TenantChips color={color} moreCount={16} tenants={[
+              "onehourairniceville",
+              "onehourairflorida",
+              "onehourairhowellmi",
+              "onehourairfortworthtx",
+              "onehourairmandevillela",
+              "onehourairmidlothianva",
+              "onehourairlaurinburgnc",
+              "onehourairwestpalmbeach",
+            ]} />
+          } />
+          <VLine color="#C8C3B5" h={12} />
+          <LevelNode label="Ben Franklin Plumbing" sublabel="3 tenants in ST" type="brand" extra={
+            <TenantChips color={color} tenants={[
+              "benfranklinflorida",
+              "benfranklinplumbingmckinneytx",
+              "benfranklinlittlerockarprecisionplumbing",
+            ]} />
+          } />
+          <VLine color="#C8C3B5" h={12} />
+          <LevelNode label="Mister Sparky Electric" sublabel="7 tenants in ST" type="brand" extra={
+            <TenantChips color={color} moreCount={2} tenants={[
+              "mistersparkyflorida",
+              "mistersparkynwa",
+              "mistersparkyhuntsville",
+              "mistersparkycoloradosprings",
+              "mistersparkyofthedesertcities",
+            ]} />
+          } />
+          <VLine color="#C8C3B5" h={12} />
+          <LevelNode label="BU (under each brand)" sublabel="Sales · Install · Svc · Maint + Territory (zip codes)" type="bu" />
         </div>
         {/* Corporate OpCos */}
         <div>
@@ -703,16 +753,27 @@ function AceOrgTree({ color, bg, border }: { color: string; bg: string; border: 
             <div style={{ fontSize: 10, color, opacity: 0.7, marginTop: 2, lineHeight: 1.4 }}>1+ territories · P&L responsibility · can consolidate CSRs & marketing</div>
             <div style={{ fontSize: 9, color: "#888", marginTop: 5, borderTop: `1px solid ${border}`, paddingTop: 5, fontStyle: "italic", lineHeight: 1.4 }}>Can be suggested to, not mandated</div>
           </div>
-          {([
-            { type: "territory" as NodeType, label: "Territory / BU (Owned Zipcodes)", sublabel: "Licensed zip codes · the unit Ace sells · e.g. Denver West · Denver East" },
-            { type: "location" as NodeType, label: "Location / Tenant", sublabel: "255 tenants today · acehandyman_metrodenver · acehandyman_swflorida · acehandyman_greatertriangle · acehandyman_columbia" },
-            { type: "bu" as NodeType, label: "BU", sublabel: "Handyman services · Install · Maintenance · CSRs merge when consolidating" },
-          ]).map((l) => (
-            <div key={l.label}>
-              <VLine color="#C8C3B5" h={12} />
-              <LevelNode label={l.label} sublabel={l.sublabel} type={l.type} />
-            </div>
-          ))}
+          <VLine color="#C8C3B5" h={12} />
+          <LevelNode label="Territory / BU (Owned Zipcodes)" sublabel="Licensed zip codes · the unit Ace sells · e.g. Denver West · Denver East" type="territory" />
+          <VLine color="#C8C3B5" h={12} />
+          <LevelNode label="Location / Tenant" sublabel="255 tenants today" type="location" extra={
+            <TenantChips color={color} moreCount={243} tenants={[
+              "acehandymanservicesofnorthwestcolumbus",
+              "acehandyman_swflorida",
+              "acehandyman_greatertriangle",
+              "acehandyman_metrodenver",
+              "acehandyman_columbia",
+              "acehandyman_harrisburg",
+              "acehandyman_metrodetroitne",
+              "acehandyman_portland",
+              "acehandyman_bloomfield",
+              "acehandyman_citrus_ocala",
+              "acehandyman_lakecook",
+              "acehandyman_eastvalley",
+            ]} />
+          } />
+          <VLine color="#C8C3B5" h={12} />
+          <LevelNode label="BU" sublabel="Handyman services · Install · Maintenance · CSRs merge when consolidating" type="bu" />
         </div>
       </div>
     </div>
